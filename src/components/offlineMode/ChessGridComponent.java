@@ -4,7 +4,7 @@ import Sound.ThreadedSound;
 import components.BasicComponent;
 import model.*;
 import view.offlineMode.OfflineModeFrame;
-import view.SoundEffect;
+//import view.SoundEffect;
 import view.offlineMode.StatusPanel;
 
 import javax.swing.*;

@@ -4,9 +4,7 @@ import components.BasicComponent;
 import controller.onlineMode.OnlineGameController;
 import model.ChessPiece;
 import net.Send;
-import view.SoundEffect;
-import view.offlineMode.OfflineModeFrame;
-import view.offlineMode.StatusPanel;
+//import view.SoundEffect;
 
 import javax.swing.*;
 import java.awt.*;
