@@ -55,11 +55,20 @@ public class ServerSelectPanel extends JScrollPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        refreshServerList();
         this.getVerticalScrollBar().setUnitIncrement(10);
         this.getVerticalScrollBar().setPreferredSize(new Dimension((int)(width * 0.03), height));
         this.setSize(width - (int)(width * 0.024), height);
+        refreshServerList();
         //this.setVisible(true);
+    }
+
+    public void reSize(int width, int height) {
+        this.width = width;
+        this.height = height;
+        serverTextHeight = height / 8;
+        this.getVerticalScrollBar().setPreferredSize(new Dimension((int)(width * 0.03), height));
+        this.setSize(width - (int)(width * 0.024), height);
+        refreshServerList();
     }
 
     public void addServer(String serverAddress) {

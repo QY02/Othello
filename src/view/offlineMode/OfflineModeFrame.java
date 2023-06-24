@@ -32,6 +32,8 @@ public class OfflineModeFrame extends JFrame {
 
     private int menubarHeight;
 
+    private ImageIcon undoIcon;
+
     public OfflineModeFrame(int width, int height, MainFrame mainFrame) {
 
         this.setTitle("Othello - OfflineMode");
@@ -181,6 +183,7 @@ public class OfflineModeFrame extends JFrame {
                 cheatBtn.setSize((int)(contentWidth * 0.15), (int)(contentHeight * 0.06));
                 cheatBtn.setLocation(saveGameBtn.getX()+restartBtn.getWidth()+(int)(contentWidth * 0.08), restartBtn.getY());
                 cheatBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(cheatBtn.getHeight() * 0.5), (int)(cheatBtn.getWidth() / 6))));
+//                undoIcon.setImage(undoIcon.getImage().getScaledInstance((int)(thisFrame.getHeight() * 0.04), (int)(thisFrame.getHeight() * 0.03),Image.SCALE_DEFAULT));
             }
 
         });
@@ -188,8 +191,8 @@ public class OfflineModeFrame extends JFrame {
     }
 
     public void addMenuBar(){
-        ImageIcon undoIcon = new ImageIcon(this.getClass().getResource("/res/undo.png"));
-        undoIcon.setImage(undoIcon.getImage().getScaledInstance((int)(this.getWidth() * 0.06), (int)(this.getWidth() * 0.045),Image.SCALE_DEFAULT));
+        undoIcon = new ImageIcon(this.getClass().getResource("/res/undo.png"));
+        undoIcon.setImage(undoIcon.getImage().getScaledInstance((int)(this.getHeight() * 0.04), (int)(this.getHeight() * 0.03),Image.SCALE_DEFAULT));
         JMenuItem undo = new JMenuItem(undoIcon){
             @Override
             public Dimension getMaximumSize() {

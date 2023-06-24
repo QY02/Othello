@@ -26,6 +26,7 @@ public class MainFrame extends JFrame {
 
     private ThreadedSound bgm;
 
+    private Insets inset;
     private int contentHeight;
     private int contentWidth;
 
@@ -39,6 +40,24 @@ public class MainFrame extends JFrame {
     private JButton deleteBtn;
 
     public MainFrame(int width, int height, ScreenSize screenSize){
+        initializeMainFrame(width, height);
+        socket = new Socket();
+        addOfflineModeButton();
+        addOnlineModeButton();
+        serverSelectComponents();
+        setSizesMainFrame();
+        addListeners();
+    }
+
+    public void playBgm() {
+        bgm.play();
+    }
+
+    public void pauseBgm() {
+        bgm.pause();
+    }
+
+    public void initializeMainFrame(int width, int height) {
         this.setTitle("Othello");
         ImageIcon icon = new ImageIcon(this.getClass().getResource("/res/icon.png"));
         this.setIconImage(icon.getImage());
@@ -49,20 +68,21 @@ public class MainFrame extends JFrame {
         this.setLocationRelativeTo(null);
 
         this.bgm = new ThreadedSound("/res/bgm00.wav", true);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         this.setVisible(true);
-        Insets inset = this.getInsets();
+        inset = this.getInsets();
         contentHeight = this.getHeight() - inset.top - inset.bottom;
         contentWidth = this.getWidth() - inset.left - inset.right;
+    }
 
-        socket = new Socket();
-
+    public void addOfflineModeButton() {
         offlineModeBtn = new JButton("OfflineMode");
-        offlineModeBtn.setSize((int)(this.getWidth() * 0.5), (int)(this.getHeight() * 0.1));
-        offlineModeBtn.setLocation((int)((contentWidth - offlineModeBtn.getWidth()) / 2),(int)((contentHeight * 0.95 - offlineModeBtn.getHeight() * 2) / 2));
-        offlineModeBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(offlineModeBtn.getHeight() * 0.5), (int)(offlineModeBtn.getWidth() / 6))));
+//        offlineModeBtn.setSize((int)(this.getWidth() * 0.5), (int)(this.getHeight() * 0.1));
+//        offlineModeBtn.setLocation((int)((contentWidth - offlineModeBtn.getWidth()) / 2),(int)((contentHeight * 0.95 - offlineModeBtn.getHeight() * 2) / 2));
+//        offlineModeBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(offlineModeBtn.getHeight() * 0.5), (int)(offlineModeBtn.getWidth() / 6))));
         offlineModeBtn.setMargin(new Insets(0, 0, 0, 0));
-        add(offlineModeBtn);
+        this.add(offlineModeBtn);
         offlineModeBtn.addActionListener(e -> {
             System.out.println("click OfflineMode Btn");
             if (offlineModeFrameIsOpen == false){
@@ -77,11 +97,13 @@ public class MainFrame extends JFrame {
             }
             this.setVisible(false);
         });
+    }
 
+    public void addOnlineModeButton() {
         onlineModeBtn = new JButton("OnlineMode");
-        onlineModeBtn.setSize((int)(this.getWidth() * 0.5), (int)(this.getHeight() * 0.1));
-        onlineModeBtn.setLocation(offlineModeBtn.getX(),offlineModeBtn.getY() + offlineModeBtn.getHeight() + (int)(contentHeight * 0.05));
-        onlineModeBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(onlineModeBtn.getHeight() * 0.5), (int)(onlineModeBtn.getWidth() / 6))));
+//        onlineModeBtn.setSize((int)(this.getWidth() * 0.5), (int)(this.getHeight() * 0.1));
+//        onlineModeBtn.setLocation(offlineModeBtn.getX(),offlineModeBtn.getY() + offlineModeBtn.getHeight() + (int)(contentHeight * 0.05));
+//        onlineModeBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(onlineModeBtn.getHeight() * 0.5), (int)(onlineModeBtn.getWidth() / 6))));
         onlineModeBtn.setMargin(new Insets(0, 0, 0, 0));
         add(onlineModeBtn);
         onlineModeBtn.addActionListener(e -> {
@@ -100,41 +122,6 @@ public class MainFrame extends JFrame {
                 this.setVisible(false);
             }
         });
-
-        serverSelectComponents();
-
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                Object[] options = {"狠心离开","再玩一会"};
-                int confirm = JOptionPane.showOptionDialog(MainFrame.this,"官人，再玩一会吧^_^","提示",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[0]);
-                if(confirm == 0){
-                    System.exit(0);
-                }
-            }
-        });
-
-        this.addComponentListener(new ComponentAdapter() {//拖动窗口监听
-            public void componentResized(ComponentEvent e) {
-                contentHeight = thisFrame.getHeight() - inset.top - inset.bottom;
-                contentWidth = thisFrame.getWidth() - inset.left - inset.right;
-                offlineModeBtn.setSize((int)(thisFrame.getWidth() * 0.5), (int)(thisFrame.getHeight() * 0.1));
-                offlineModeBtn.setLocation((int)((contentWidth - offlineModeBtn.getWidth()) / 2),(int)((contentHeight * 0.95 - offlineModeBtn.getHeight() * 2) / 2));
-                offlineModeBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(offlineModeBtn.getHeight() * 0.5), (int)(offlineModeBtn.getWidth() / 6))));
-                onlineModeBtn.setSize((int)(thisFrame.getWidth() * 0.5), (int)(thisFrame.getHeight() * 0.1));
-                onlineModeBtn.setLocation(offlineModeBtn.getX(),offlineModeBtn.getY() + offlineModeBtn.getHeight() + (int)(contentHeight * 0.05));
-                onlineModeBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(onlineModeBtn.getHeight() * 0.5), (int)(onlineModeBtn.getWidth() / 6))));
-            }
-
-        });
-    }
-
-    public void playBgm() {
-        bgm.play();
-    }
-
-    public void pauseBgm() {
-        bgm.pause();
     }
 
     public void serverSelectComponents() {
@@ -143,9 +130,9 @@ public class MainFrame extends JFrame {
         this.add(serverSelectPanel);
 
         backBtn = new JButton("Back");
-        backBtn.setSize((int)(this.getWidth() * 0.2), (int)(this.getHeight() * 0.08));
-        backBtn.setLocation((int)(contentWidth * 0.1),serverSelectPanel.getY() + serverSelectPanel.getHeight() + (int)(contentHeight * 0.08));
-        backBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(backBtn.getHeight() * 0.5), (int)(backBtn.getWidth() / 6))));
+//        backBtn.setSize((int)(this.getWidth() * 0.2), (int)(this.getHeight() * 0.08));
+//        backBtn.setLocation((int)(contentWidth * 0.1),serverSelectPanel.getY() + serverSelectPanel.getHeight() + (int)(contentHeight * 0.08));
+//        backBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(backBtn.getHeight() * 0.5), (int)(backBtn.getWidth() / 6))));
         backBtn.setMargin(new Insets(0, 0, 0, 0));
         backBtn.setVisible(false);
         backBtn.addActionListener(e -> {
@@ -160,9 +147,9 @@ public class MainFrame extends JFrame {
         add(backBtn);
 
         addBtn = new JButton("Add");
-        addBtn.setSize((int)(this.getWidth() * 0.2), (int)(this.getHeight() * 0.08));
-        addBtn.setLocation(backBtn.getX() + backBtn.getWidth() + (int)(contentWidth * 0.1),serverSelectPanel.getY() + serverSelectPanel.getHeight() + (int)(contentHeight * 0.08));
-        addBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(addBtn.getHeight() * 0.5), (int)(addBtn.getWidth() / 6))));
+//        addBtn.setSize((int)(this.getWidth() * 0.2), (int)(this.getHeight() * 0.08));
+//        addBtn.setLocation(backBtn.getX() + backBtn.getWidth() + (int)(contentWidth * 0.1),serverSelectPanel.getY() + serverSelectPanel.getHeight() + (int)(contentHeight * 0.08));
+//        addBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(addBtn.getHeight() * 0.5), (int)(addBtn.getWidth() / 6))));
         addBtn.setMargin(new Insets(0, 0, 0, 0));
         addBtn.setVisible(false);
         addBtn.addActionListener(e -> {
@@ -177,9 +164,9 @@ public class MainFrame extends JFrame {
         add(addBtn);
 
         deleteBtn = new JButton("Delete");
-        deleteBtn.setSize((int)(this.getWidth() * 0.2), (int)(this.getHeight() * 0.08));
-        deleteBtn.setLocation(addBtn.getX() + addBtn.getWidth() + (int)(contentWidth * 0.1),serverSelectPanel.getY() + serverSelectPanel.getHeight() + (int)(contentHeight * 0.08));
-        deleteBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(deleteBtn.getHeight() * 0.5), (int)(deleteBtn.getWidth() / 6))));
+//        deleteBtn.setSize((int)(this.getWidth() * 0.2), (int)(this.getHeight() * 0.08));
+//        deleteBtn.setLocation(addBtn.getX() + addBtn.getWidth() + (int)(contentWidth * 0.1),serverSelectPanel.getY() + serverSelectPanel.getHeight() + (int)(contentHeight * 0.08));
+//        deleteBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(deleteBtn.getHeight() * 0.5), (int)(deleteBtn.getWidth() / 6))));
         deleteBtn.setMargin(new Insets(0, 0, 0, 0));
         deleteBtn.setVisible(false);
         deleteBtn.addActionListener(e -> {
@@ -187,6 +174,54 @@ public class MainFrame extends JFrame {
             serverSelectPanel.deleteServer();
         });
         add(deleteBtn);
+        setSizesServerSelectComponents();
+    }
+
+    public void addListeners() {
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Object[] options = {"狠心离开","再玩一会"};
+                int confirm = JOptionPane.showOptionDialog(MainFrame.this,"官人，再玩一会吧^_^","提示",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[0]);
+                if(confirm == 0){
+                    System.exit(0);
+                }
+            }
+        });
+
+        this.addComponentListener(new ComponentAdapter() {//拖动窗口监听
+            public void componentResized(ComponentEvent e) {
+                setSizesMainFrame();
+                setSizesServerSelectComponents();
+            }
+        });
+    }
+
+    public void setSizesMainFrame() {
+        contentHeight = thisFrame.getHeight() - inset.top - inset.bottom;
+        contentWidth = thisFrame.getWidth() - inset.left - inset.right;
+        offlineModeBtn.setSize((int)(thisFrame.getWidth() * 0.5), (int)(thisFrame.getHeight() * 0.1));
+        offlineModeBtn.setLocation((int)((contentWidth - offlineModeBtn.getWidth()) / 2),(int)((contentHeight * 0.95 - offlineModeBtn.getHeight() * 2) / 2));
+        offlineModeBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(offlineModeBtn.getHeight() * 0.5), (int)(offlineModeBtn.getWidth() / 6))));
+        onlineModeBtn.setSize((int)(thisFrame.getWidth() * 0.5), (int)(thisFrame.getHeight() * 0.1));
+        onlineModeBtn.setLocation(offlineModeBtn.getX(),offlineModeBtn.getY() + offlineModeBtn.getHeight() + (int)(contentHeight * 0.05));
+        onlineModeBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(onlineModeBtn.getHeight() * 0.5), (int)(onlineModeBtn.getWidth() / 6))));
+    }
+
+    public void setSizesServerSelectComponents() {
+        serverSelectPanel.reSize(this.getWidth(), (int)(this.getHeight() * 0.7));
+
+        backBtn.setSize((int)(this.getWidth() * 0.2), (int)(this.getHeight() * 0.08));
+        backBtn.setLocation((int)(contentWidth * 0.1),serverSelectPanel.getY() + serverSelectPanel.getHeight() + (int)(contentHeight * 0.08));
+        backBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(backBtn.getHeight() * 0.5), (int)(backBtn.getWidth() / 6))));
+
+        addBtn.setSize((int)(this.getWidth() * 0.2), (int)(this.getHeight() * 0.08));
+        addBtn.setLocation(backBtn.getX() + backBtn.getWidth() + (int)(contentWidth * 0.1),serverSelectPanel.getY() + serverSelectPanel.getHeight() + (int)(contentHeight * 0.08));
+        addBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(addBtn.getHeight() * 0.5), (int)(addBtn.getWidth() / 6))));
+
+        deleteBtn.setSize((int)(this.getWidth() * 0.2), (int)(this.getHeight() * 0.08));
+        deleteBtn.setLocation(addBtn.getX() + addBtn.getWidth() + (int)(contentWidth * 0.1),serverSelectPanel.getY() + serverSelectPanel.getHeight() + (int)(contentHeight * 0.08));
+        deleteBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(deleteBtn.getHeight() * 0.5), (int)(deleteBtn.getWidth() / 6))));
     }
 
     public void openOnlineModeFrame(String address, int port) {
