@@ -25,6 +25,7 @@ public class OnlineGameController {
     public OnlineGameController(OnlineModeFrame onlineModeFrame) {
         this.onlineModeFrame = onlineModeFrame;
         threadedJOptionalPane = new ThreadedJOptionalPane();
+        threadedJOptionalPane.start();
     }
 
     public boolean isEnable() {

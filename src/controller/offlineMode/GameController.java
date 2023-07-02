@@ -21,12 +21,18 @@ public class GameController {
     private int whiteScore;
     private int id;
     private boolean end = false;
+    private int blackPlayerType;
+    private int whitePlayerType;
 
-    public GameController(ChessBoardPanel gamePanel, StatusPanel statusPanel,Save save) {
+    public GameController(ChessBoardPanel gamePanel, StatusPanel statusPanel,Save save, int blackPlayerType, int whitePlayerType) {
         this.gamePanel = gamePanel;
         this.statusPanel = statusPanel;
         this.currentPlayer = ChessPiece.BLACK;
         this.save = save;
+
+        this.blackPlayerType = blackPlayerType;
+        this.whitePlayerType = whitePlayerType;
+
         blackScore = 2;
         whiteScore = 2;
         id = 1;
@@ -284,5 +290,13 @@ public class GameController {
         this.end = true;
         this.currentPlayer = null;
         statusPanel.setEnd();
+    }
+
+    public int getBlackPlayerType() {
+        return blackPlayerType;
+    }
+
+    public int getWhitePlayerType() {
+        return whitePlayerType;
     }
 }

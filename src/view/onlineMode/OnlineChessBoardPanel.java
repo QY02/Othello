@@ -97,6 +97,16 @@ public class OnlineChessBoardPanel extends JPanel {
         repaint();
     }
 
+    public void removeTips() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (onlineChessGrids[i][j].getChessPiece() == ChessPiece.TIP) {
+                    onlineChessGrids[i][j].setChessPiece(null);
+                }
+            }
+        }
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

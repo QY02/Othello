@@ -18,6 +18,7 @@ public class Receive implements Runnable{
     private volatile Scanner in;
 
     private volatile TestConnection testConnection;
+    private volatile boolean isStop = false;
 
     private OnlineChessBoardPanel onlineChessBoardPanel;
     private OnlineStatusPanel onlineStatusPanel;
@@ -68,8 +69,14 @@ public class Receive implements Runnable{
                         onlineStatusPanel.setPlayerColor(true);
                         onlineGameController.setPlayerType(1);
                     }
-                    else if (content == 2) {
+                    else if (content == 0) {
                         onlineGameController.disable();
+                        onlineChessBoardPanel.removeTips();
+                        onlineStatusPanel.setNull();
+                    }
+                    else if (content == 2) {
+//                        onlineGameController.disable();
+//                        onlineChessBoardPanel.removeTips();
                         onlineStatusPanel.setWait();
                     }
                     else if (content == 3) {
@@ -114,7 +121,26 @@ public class Receive implements Runnable{
                     e.printStackTrace();
                 }
             }
+            while (isStop) {
+                System.out.println("Receive stop");
+                synchronized (this) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println("Receive restart");
+            }
         }
+    }
+
+    public void stop() {
+        this.isStop = true;
+    }
+
+    public void restart() {
+        this.isStop = false;
     }
 
     public void resetSocket(Socket socket) {

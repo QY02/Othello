@@ -27,7 +27,7 @@ public class Reconnect {
             socket = new Socket();
             try {
                 socket.connect(new InetSocketAddress(onlineModeFrame.getAddress(), onlineModeFrame.getPort()),1000);
-                onlineModeFrame.resetSocket(socket);
+                onlineModeFrame.resetSocket(socket, true);
                 System.out.println("reconnect!");
                 break;
             } catch (IOException e) {

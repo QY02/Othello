@@ -3,6 +3,7 @@ package components.offlineMode;
 import Sound.ThreadedSound;
 import components.BasicComponent;
 import model.*;
+import view.offlineMode.ChessBoardPanel;
 import view.offlineMode.OfflineModeFrame;
 //import view.SoundEffect;
 import view.offlineMode.StatusPanel;
@@ -16,12 +17,14 @@ public class ChessGridComponent extends BasicComponent {
     public static Color gridColor = new Color(255, 150, 50);
 
     private ChessPiece chessPiece;
+    private ChessBoardPanel chessBoardPanel;
     private int row;
     private int col;
 
-    public ChessGridComponent(int row, int col) {
+    public ChessGridComponent(ChessBoardPanel chessBoardPanel, int row, int col) {
         this.setSize(gridSize, gridSize);
 
+        this.chessBoardPanel = chessBoardPanel;
         this.row = row;
         this.col = col;
     }
@@ -34,81 +37,93 @@ public class ChessGridComponent extends BasicComponent {
     public void onMouseClicked() {
         System.out.printf("%s clicked (%d, %d)\n", OfflineModeFrame.controller.getCurrentPlayer(), row, col);
         //todo: complete mouse click method
-        if ((OfflineModeFrame.controller.canClick(row, col))&&(OfflineModeFrame.controller.getCurrentPlayer()!=null)) {
-            System.out.println("有效走棋！");
-            ThreadedSound luozi = new ThreadedSound("/res/luozi.wav", false);
-            StatusPanel.setValid();
-            OfflineModeFrame.controller.removeTips();
-            OfflineModeFrame.save.addStep(OfflineModeFrame.controller.getId(),row,col, OfflineModeFrame.controller.getCurrentPlayer());
-            this.chessPiece = OfflineModeFrame.controller.getCurrentPlayer();
-            OfflineModeFrame.controller.flip(row,col, OfflineModeFrame.controller.getCurrentPlayer());
-            OfflineModeFrame.save.addChessBoard(OfflineModeFrame.controller.getId());
-            OfflineModeFrame.controller.swapPlayer();
-            boolean canShow = OfflineModeFrame.controller.showTip(OfflineModeFrame.controller.getCurrentPlayer());
-            if(canShow == false){
-                OfflineModeFrame.controller.swapPlayer();
-                boolean canAlsoShow = OfflineModeFrame.controller.showTip(OfflineModeFrame.controller.getCurrentPlayer());
-                if(canAlsoShow == false){
-                    if (OfflineModeFrame.controller.getBlackScore() == OfflineModeFrame.controller.getWhiteScore()) {
-                        OfflineModeFrame.controller.end();
-                        System.out.println("平局");
-                        Object[] options = {"重新开始", "返回"};
-                        int confirm = JOptionPane.showOptionDialog(null, "平局", "Finish", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-                        if (confirm == 0) {
-                            OfflineModeFrame.controller.restart();
-                            OfflineModeFrame.save.restart();
-                            OfflineModeFrame.controller.restartChessBoard();
-                        }
-                        else if(confirm == 1){
-                            OfflineModeFrame.controller.idIncrease();
-                        }
-                    }
-                    if (OfflineModeFrame.controller.getBlackScore() > OfflineModeFrame.controller.getWhiteScore()) {
-                        OfflineModeFrame.controller.end();
-                        System.out.println("黑方胜利");
-                        ThreadedSound victory = new ThreadedSound("/res/victory.wav", false);
-                        Object[] options = {"重新开始", "返回"};
-                        int confirm = JOptionPane.showOptionDialog(null, "恭喜黑方胜利", "Celebration", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-                        if (confirm == 0) {
-                            OfflineModeFrame.controller.restart();
-                            OfflineModeFrame.save.restart();
-                            OfflineModeFrame.controller.restartChessBoard();
-                        }
-                        else if(confirm == 1){
-                            OfflineModeFrame.controller.idIncrease();
-                        }
-                    }
-                    if (OfflineModeFrame.controller.getBlackScore() < OfflineModeFrame.controller.getWhiteScore()) {
-                        OfflineModeFrame.controller.end();
-                        System.out.println("白方胜利");
-                        ThreadedSound victory = new ThreadedSound("/res/victory.wav", false);
-                        Object[] options = {"重新开始", "返回"};
-                        int confirm = JOptionPane.showOptionDialog(null, "恭喜白方胜利", "Celebration", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-                        if (confirm == 0) {
-                            OfflineModeFrame.controller.restart();
-                            OfflineModeFrame.save.restart();
-                            OfflineModeFrame.controller.restartChessBoard();
-                        }
-                        else if(confirm == 1){
-                            OfflineModeFrame.controller.idIncrease();
-                        }
-                    }
-                }
-                else if(canAlsoShow == true){
-                    StatusPanel.playerNotChange(OfflineModeFrame.controller.getCurrentPlayer());
-                    OfflineModeFrame.controller.idIncrease();
+        if (((OfflineModeFrame.controller.getCurrentPlayer() == ChessPiece.BLACK) && (OfflineModeFrame.controller.getBlackPlayerType() == 0)) || ((OfflineModeFrame.controller.getCurrentPlayer() == ChessPiece.WHITE) && (OfflineModeFrame.controller.getWhitePlayerType() == 0))) {
+            if ((OfflineModeFrame.controller.canClick(row, col))&&(OfflineModeFrame.controller.getCurrentPlayer()!=null)) {
+                System.out.println("有效走棋！");
+                move();
+                synchronized (this.chessBoardPanel.getOfflineModeFrame().getAiMain()) {
+                    this.chessBoardPanel.getOfflineModeFrame().getAiMain().notifyAll();
                 }
             }
-            else if(canShow == true){
-                OfflineModeFrame.controller.idIncrease();
+            else {
+                System.out.println("无效走棋！");
+                ThreadedSound invalid = new ThreadedSound("/res/invalid.wav", false);
+                StatusPanel.setInValid();
             }
-            repaint();
         }
         else {
-            System.out.println("无效走棋！");
-            ThreadedSound invalid = new ThreadedSound("/res/invalid.wav", false);
-            StatusPanel.setInValid();
+            System.out.println("Player not turn!");
         }
+    }
+
+    public synchronized void move() {
+        ThreadedSound luozi = new ThreadedSound("/res/luozi.wav", false);
+        StatusPanel.setValid();
+        OfflineModeFrame.controller.removeTips();
+        OfflineModeFrame.save.addStep(OfflineModeFrame.controller.getId(),row,col, OfflineModeFrame.controller.getCurrentPlayer());
+        this.chessPiece = OfflineModeFrame.controller.getCurrentPlayer();
+        OfflineModeFrame.controller.flip(row,col, OfflineModeFrame.controller.getCurrentPlayer());
+        OfflineModeFrame.save.addChessBoard(OfflineModeFrame.controller.getId());
+        OfflineModeFrame.controller.swapPlayer();
+        boolean canShow = OfflineModeFrame.controller.showTip(OfflineModeFrame.controller.getCurrentPlayer());
+        if(canShow == false){
+            OfflineModeFrame.controller.swapPlayer();
+            boolean canAlsoShow = OfflineModeFrame.controller.showTip(OfflineModeFrame.controller.getCurrentPlayer());
+            if(canAlsoShow == false){
+                if (OfflineModeFrame.controller.getBlackScore() == OfflineModeFrame.controller.getWhiteScore()) {
+                    OfflineModeFrame.controller.end();
+                    System.out.println("平局");
+                    Object[] options = {"重新开始", "返回"};
+                    int confirm = JOptionPane.showOptionDialog(null, "平局", "Finish", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                    if (confirm == 0) {
+                        OfflineModeFrame.controller.restart();
+                        OfflineModeFrame.save.restart();
+                        OfflineModeFrame.controller.restartChessBoard();
+                    }
+                    else if(confirm == 1){
+                        OfflineModeFrame.controller.idIncrease();
+                    }
+                }
+                if (OfflineModeFrame.controller.getBlackScore() > OfflineModeFrame.controller.getWhiteScore()) {
+                    OfflineModeFrame.controller.end();
+                    System.out.println("黑方胜利");
+                    ThreadedSound victory = new ThreadedSound("/res/victory.wav", false);
+                    Object[] options = {"重新开始", "返回"};
+                    int confirm = JOptionPane.showOptionDialog(null, "恭喜黑方胜利", "Celebration", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                    if (confirm == 0) {
+                        OfflineModeFrame.controller.restart();
+                        OfflineModeFrame.save.restart();
+                        OfflineModeFrame.controller.restartChessBoard();
+                    }
+                    else if(confirm == 1){
+                        OfflineModeFrame.controller.idIncrease();
+                    }
+                }
+                if (OfflineModeFrame.controller.getBlackScore() < OfflineModeFrame.controller.getWhiteScore()) {
+                    OfflineModeFrame.controller.end();
+                    System.out.println("白方胜利");
+                    ThreadedSound victory = new ThreadedSound("/res/victory.wav", false);
+                    Object[] options = {"重新开始", "返回"};
+                    int confirm = JOptionPane.showOptionDialog(null, "恭喜白方胜利", "Celebration", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                    if (confirm == 0) {
+                        OfflineModeFrame.controller.restart();
+                        OfflineModeFrame.save.restart();
+                        OfflineModeFrame.controller.restartChessBoard();
+                    }
+                    else if(confirm == 1){
+                        OfflineModeFrame.controller.idIncrease();
+                    }
+                }
+            }
+            else if(canAlsoShow == true){
+                StatusPanel.playerNotChange(OfflineModeFrame.controller.getCurrentPlayer());
+                OfflineModeFrame.controller.idIncrease();
+            }
+        }
+        else if(canShow == true){
+            OfflineModeFrame.controller.idIncrease();
+        }
+        repaint();
     }
 
 

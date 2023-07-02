@@ -1,5 +1,6 @@
 package view.offlineMode;
 
+import ai.searcher.Minimax;
 import components.offlineMode.ChessGridComponent;
 import model.ChessPiece;
 
@@ -12,8 +13,14 @@ public class ChessBoardPanel extends JPanel {
     private ChessGridComponent[][] chessGrids;
     private int length;
     private boolean cheat = false;
+    private OfflineModeFrame offlineModeFrame;
+    private int blackPlayerType;
+    private int whitePlayerType;
+    private Minimax blackPlayerAi;
+    private Minimax whitePlayerAi;
 
-    public ChessBoardPanel(int width, int height) {
+    public ChessBoardPanel(OfflineModeFrame offlineModeFrame, int width, int height, int blackPlayerType, int whitePlayerType, Minimax blackPlayerAi, Minimax whitePlayerAi) {
+        this.offlineModeFrame = offlineModeFrame;
         this.setVisible(true);
         this.setFocusable(true);
         this.setLayout(null);
@@ -24,6 +31,11 @@ public class ChessBoardPanel extends JPanel {
         ChessGridComponent.chessSize = (int) (ChessGridComponent.gridSize * 0.9);
         System.out.printf("width = %d height = %d gridSize = %d chessSize = %d\n",
                 width, height, ChessGridComponent.gridSize, ChessGridComponent.chessSize);
+
+        this.blackPlayerType = blackPlayerType;
+        this.whitePlayerType = whitePlayerType;
+        this.blackPlayerAi = blackPlayerAi;
+        this.whitePlayerAi = whitePlayerAi;
 
         initialChessGrids();//return empty chessboard
         initialGame();//add initial four chess
@@ -53,7 +65,7 @@ public class ChessBoardPanel extends JPanel {
         //draw all chess grids
         for (int i = 0; i < CHESS_COUNT; i++) {
             for (int j = 0; j < CHESS_COUNT; j++) {
-                ChessGridComponent gridComponent = new ChessGridComponent(i, j);
+                ChessGridComponent gridComponent = new ChessGridComponent(this, i, j);
                 gridComponent.setLocation((length - 8 * ChessGridComponent.gridSize)/2 + j * (ChessGridComponent.gridSize), (length - 8 * ChessGridComponent.gridSize)/2 + i * (ChessGridComponent.gridSize));
                 chessGrids[i][j] = gridComponent;
                 this.add(chessGrids[i][j]);
@@ -69,6 +81,37 @@ public class ChessBoardPanel extends JPanel {
         chessGrids[3][4].setChessPiece(ChessPiece.WHITE);
         chessGrids[4][3].setChessPiece(ChessPiece.WHITE);
         chessGrids[4][4].setChessPiece(ChessPiece.BLACK);
+    }
+
+    public synchronized void aiMove() {
+        while (((OfflineModeFrame.controller.getCurrentPlayer() == ChessPiece.BLACK) && (this.blackPlayerType != 0)) || ((OfflineModeFrame.controller.getCurrentPlayer() == ChessPiece.WHITE) && (this.whitePlayerType != 0))) {
+            if (OfflineModeFrame.controller.getCurrentPlayer() == ChessPiece.BLACK) {
+                int[] position = this.blackPlayerAi.search(getChessBoardData(), -1, -1, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                chessGrids[position[0]][position[1]].move();
+            }
+            else {
+                int[] position = this.whitePlayerAi.search(getChessBoardData(), 1, -1, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                chessGrids[position[0]][position[1]].move();
+            }
+        }
+    }
+
+    public int[][] getChessBoardData() {
+        int[][] chessBoardData = new int[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (this.chessGrids[i][j].getChessPiece() == ChessPiece.BLACK) {
+                    chessBoardData[i][j] = -1;
+                }
+                else if (this.chessGrids[i][j].getChessPiece() == ChessPiece.WHITE) {
+                    chessBoardData[i][j] = 1;
+                }
+                else {
+                    chessBoardData[i][j] = 0;
+                }
+            }
+        }
+        return chessBoardData;
     }
 
     public void restart(){
@@ -298,5 +341,9 @@ public class ChessBoardPanel extends JPanel {
             }
         }
         repaint();
+    }
+
+    public OfflineModeFrame getOfflineModeFrame() {
+        return offlineModeFrame;
     }
 }

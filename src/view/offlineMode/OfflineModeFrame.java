@@ -3,6 +3,11 @@ package view.offlineMode;
 
 import SaveAndLoad.Save;
 import Sound.ThreadedSound;
+import ai.AiMain;
+import ai.evaluate.Evaluator;
+import ai.evaluate.NormalEvaluator;
+import ai.evaluate.ReversedEvaluator;
+import ai.searcher.Minimax;
 import controller.offlineMode.GameController;
 import view.BackGroundPanel;
 import view.MainFrame;
@@ -33,8 +38,13 @@ public class OfflineModeFrame extends JFrame {
     private int menubarHeight;
 
     private ImageIcon undoIcon;
+    private int blackPlayerType;
+    private int whitePlayerType;
+    private Minimax blackPlayerAi;
+    private Minimax whitePlayerAi;
+    private AiMain aiMain;
 
-    public OfflineModeFrame(int width, int height, MainFrame mainFrame) {
+    public OfflineModeFrame(int width, int height, MainFrame mainFrame, int blackPlayerType, int whitePlayerType) {
 
         this.setTitle("Othello - OfflineMode");
         ImageIcon icon = new ImageIcon(this.getClass().getResource("/res/icon.png"));
@@ -44,6 +54,29 @@ public class OfflineModeFrame extends JFrame {
         this.setSize(width, height);
 
         this.setLocationRelativeTo(null);
+
+        this.blackPlayerType = blackPlayerType;
+        Evaluator evaluator = null;
+        if (blackPlayerType == 1) {
+            evaluator = new NormalEvaluator();
+        }
+        else if (blackPlayerType == 2) {
+            evaluator = new ReversedEvaluator();
+        }
+        if (blackPlayerType != 0) {
+            this.blackPlayerAi = new Minimax(evaluator, 7);
+        }
+
+        this.whitePlayerType = whitePlayerType;
+        if (whitePlayerType == 1) {
+            evaluator = new NormalEvaluator();
+        }
+        else if (whitePlayerType == 2) {
+            evaluator = new ReversedEvaluator();
+        }
+        if (whitePlayerType != 0) {
+            this.whitePlayerAi = new Minimax(evaluator, 7);
+        }
 
         bgm = new ThreadedSound("/res/bgm1.wav", true, 1000);
         addMenuBar();
@@ -57,13 +90,13 @@ public class OfflineModeFrame extends JFrame {
         int temp = (int)(minSize * 0.75);
         chessBoardPanelSize = (temp % 2) == 0 ? temp : (temp + 1);
 
-        chessBoardPanel = new ChessBoardPanel(chessBoardPanelSize, chessBoardPanelSize);
+        chessBoardPanel = new ChessBoardPanel(this, chessBoardPanelSize, chessBoardPanelSize, this.blackPlayerType, this.whitePlayerType, this.blackPlayerAi, this.whitePlayerAi);
         chessBoardPanel.setLocation((contentWidth - chessBoardPanel.getWidth()) / 2, (contentHeight - chessBoardPanel.getHeight()) / 3);
 
         statusPanel = new StatusPanel(this.chessBoardPanel.getWidth(), this.chessBoardPanel.getY());
         statusPanel.setLocation(this.chessBoardPanel.getX(), 0);
         save = new Save(chessBoardPanel);
-        controller = new GameController(chessBoardPanel, statusPanel, save);
+        controller = new GameController(chessBoardPanel, statusPanel, save, this.blackPlayerType, this.whitePlayerType);
         backGroundPanel = new BackGroundPanel(contentWidth,contentHeight);
 
         this.add(chessBoardPanel);
@@ -188,6 +221,9 @@ public class OfflineModeFrame extends JFrame {
 
         });
 
+        aiMain = new AiMain(this, this.blackPlayerType, this.whitePlayerType, this.blackPlayerAi, this.whitePlayerAi);
+        Thread aiMainThread = new Thread(aiMain);
+        aiMainThread.start();
     }
 
     public void addMenuBar(){
@@ -280,5 +316,13 @@ public class OfflineModeFrame extends JFrame {
 
     public void playBgm() {
         bgm.play();
+    }
+
+    public ChessBoardPanel getChessBoardPanel() {
+        return chessBoardPanel;
+    }
+
+    public AiMain getAiMain() {
+        return aiMain;
     }
 }

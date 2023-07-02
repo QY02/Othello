@@ -31,13 +31,18 @@ public class Send{
         out.println(data);
     }
 
-    public void resetSocket(Socket socket) {
+    public void resetSocket(Socket socket, boolean reconnect) {
         this.socket = socket;
         try {
             outStream = socket.getOutputStream();
             out = new PrintWriter(new OutputStreamWriter(outStream, "UTF-8"), true);
-            out.println(onlineGameController.getPlayerType());
-            out.println(1);
+            if (reconnect) {
+                out.println(onlineGameController.getPlayerType());
+                out.println(1);
+            }
+            else {
+                out.println(-1);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
