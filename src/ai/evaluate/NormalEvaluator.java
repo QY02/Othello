@@ -17,6 +17,9 @@ public class NormalEvaluator extends Evaluator{
                 if (chessBoardData[i][j] == currentPlayer) {
                     score += weights[i][j];
                 }
+                else if (chessBoardData[i][j] == -currentPlayer) {
+                    score -= weights[i][j];
+                }
             }
         }
         return score;
