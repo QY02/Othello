@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.rt.othello'
+version = '0.0.1'
+
+ext {
+    mainClass = "com.rt.othello.Main"
+}
+
+application {
+    mainClass = "${this.mainClass}"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+//    implementation 'javazoom:jlayer:1.0.1'
+    testImplementation platform('org.junit:junit-bom:5.9.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+}
+
+compileJava {
+    options.encoding('UTF-8')
+}
+
+compileTestJava {
+    options.encoding('UTF-8')
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    archiveBaseName = "Othello"
+    version = "0.0.1"
+    manifest {
+        attributes "Manifest-Version": 1.0, 'Main-Class': "${mainClass}"
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

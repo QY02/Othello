@@ -1,0 +1,87 @@
+package com.rt.othello.net;
+
+import com.rt.othello.view.MainFrame;
+import com.rt.othello.view.onlineMode.OnlineModeFrame;
+
+import javax.swing.*;
+
+public class TestConnection extends Thread{
+
+    private Send send;
+    private Reconnect reconnect;
+    private OnlineModeFrame onlineModeFrame;
+    private volatile boolean isStop = false;
+
+    private volatile boolean isConnected = false;
+
+    public TestConnection(Send send, Reconnect reconnect, OnlineModeFrame onlineModeFrame) {
+        this.send = send;
+        this.reconnect = reconnect;
+        this.onlineModeFrame = onlineModeFrame;
+    }
+
+    @Override
+    public void run() {
+        try {
+            sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        while (true) {
+            send.send(-1);
+            System.out.println("send-1");
+            try {
+                sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (!isStop) {
+                if (isConnected == false) {
+                    System.out.println("Disconnected!");
+                    Object[] options = {"reconnect"};
+                    JOptionPane.showOptionDialog(onlineModeFrame,"Disconnect from the server","Connection lost",JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,options,options[0]);
+                    onlineModeFrame.getOnlineStatusPanel().setConnecting();
+                    reconnect.reconnect();
+                    onlineModeFrame.getOnlineStatusPanel().setNull();
+                    try {
+                        sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    isConnected = false;
+                    System.out.println("connected");
+                    try {
+                        sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            while (isStop) {
+                System.out.println("TestConnection stop");
+                synchronized (this) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println("TestConnection restart");
+            }
+        }
+    }
+
+    public void toStop() {
+        this.isStop = true;
+    }
+
+    public void restart() {
+        this.isStop = false;
+    }
+
+    public void isConnected() {
+        this.isConnected = true;
+    }
+}
