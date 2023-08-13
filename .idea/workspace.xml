@@ -4,7 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="346ffc93-740f-4630-afb2-b0ce439f36f5" name="Changes" comment="" />
+    <list default="true" id="346ffc93-740f-4630-afb2-b0ce439f36f5" name="Changes" comment="Modify gitignore">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/rt/othello/view/ResizePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/rt/othello/view/MainFrame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/rt/othello/view/MainFrame$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/rt/othello/view/MainFrame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/rt/othello/view/MainFrame$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/rt/othello/view/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/rt/othello/view/MainFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/rt/othello/view/offlineMode/StatusPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/rt/othello/view/offlineMode/StatusPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/Othello-0.0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/Othello-0.0.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rt/othello/view/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rt/othello/view/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rt/othello/view/offlineMode/StatusPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rt/othello/view/offlineMode/StatusPanel.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -30,30 +42,45 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/com/rt/othello/view/MainFrame.java" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="ProjectId" id="2TcOjwq0u9vhwmijUEN0ddRll6x" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
     <option name="sortByType" value="true" />
     <option name="sortKey" value="BY_TYPE" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/Projects/IDEA/Othello_Gradle/src/main/java/com/rt/othello",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.5494253",
-    "settings.editor.selected.configurable": "File.Encoding",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Projects/IDEA/Othello_Gradle&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.29542303&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Projects\IDEA\Othello_Gradle\src\main\java\com\rt\othello" />
@@ -62,41 +89,24 @@
       <recent name="com.rt.othello" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Othello_Gradle [jar]">
-    <configuration name="Othello_Gradle [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="gradle build" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Gradle.Othello_Gradle [run]">
+    <configuration name="Othello_Gradle [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
+        <option name="scriptParameters" value="" />
         <option name="taskDescriptions">
           <list />
         </option>
         <option name="taskNames">
           <list>
-            <option value="clean" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="Othello_Gradle [compileJava]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="compileJava" />
+            <option value="build" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -151,35 +161,11 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Othello_Gradle [startScripts]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="startScripts" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.Othello_Gradle [jar]" />
         <item itemvalue="Gradle.Othello_Gradle [run]" />
-        <item itemvalue="Gradle.Othello_Gradle [clean]" />
-        <item itemvalue="Gradle.Othello_Gradle [compileJava]" />
-        <item itemvalue="Gradle.Othello_Gradle [startScripts]" />
+        <item itemvalue="Gradle.Othello_Gradle [jar]" />
+        <item itemvalue="Gradle.Othello_Gradle [build]" />
       </list>
     </recent_temporary>
   </component>
@@ -194,10 +180,52 @@
       <workItem from="1691339043374" duration="1472000" />
       <workItem from="1691340545553" duration="2096000" />
       <workItem from="1691372339148" duration="11756000" />
+      <workItem from="1691591927526" duration="4747000" />
+      <workItem from="1691640792442" duration="2861000" />
+      <workItem from="1691673003411" duration="10545000" />
+      <workItem from="1691719485028" duration="8593000" />
+      <workItem from="1691806735576" duration="966000" />
+      <workItem from="1691807806052" duration="4714000" />
+      <workItem from="1691845301857" duration="13000" />
+      <workItem from="1691845321470" duration="1514000" />
+      <workItem from="1691858657551" duration="599000" />
     </task>
+    <task id="LOCAL-00001" summary="Change build system to gradle">
+      <option name="closed" value="true" />
+      <created>1691592448054</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1691592448054</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Modify gitignore">
+      <option name="closed" value="true" />
+      <created>1691593638318</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1691593638318</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Change build system to gradle" />
+    <MESSAGE value="Modify gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modify gitignore" />
   </component>
 </project>

@@ -34,7 +34,7 @@ public class StatusPanel extends JPanel {
 
         this.tip = new JLabel();
         this.tip.setBounds(0, (int)(height * 0.55), width, (int)(height * 0.4));
-        this.tip.setFont(new Font("MS Song", Font.BOLD, Math.min((int)(this.tip.getHeight()), (int)(this.tip.getWidth() / 14))));
+        this.tip.setFont(new Font("Calibri", Font.BOLD, Math.min((int)(this.tip.getHeight()), (int)(this.tip.getWidth() / 14))));
         this.tip.setForeground(Color.RED);
         this.tip.setHorizontalAlignment(JLabel.CENTER);
         this.tip.setText(null);
@@ -67,15 +67,15 @@ public class StatusPanel extends JPanel {
     }
 
     public static void setInValid(){
-        tip.setText("无效走棋！");
+        tip.setText("Invalid move!");
     }
 
     public static void playerNotChange(ChessPiece chessPiece){
         if(chessPiece == ChessPiece.BLACK){
-            tip.setText("白方无处可走，黑方继续！");
+            tip.setText("White has no place to move, black continue!");
         }
         else if(chessPiece == ChessPiece.WHITE){
-            tip.setText("黑方无处可走，白方继续！");
+            tip.setText("Black has no place to move, white continue!");
         }
     }
 }

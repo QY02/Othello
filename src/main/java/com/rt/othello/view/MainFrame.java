@@ -36,6 +36,8 @@ public class MainFrame extends JFrame {
 
     private JButton offlineModeBtn;
     private JButton onlineModeBtn;
+    private ResizePanel resizePanel;
+    private JButton resizeBtn;
     private ServerSelectPanel serverSelectPanel;
     private JButton backBtn;
     private JButton addBtn;
@@ -65,6 +67,7 @@ public class MainFrame extends JFrame {
         addOfflinePlayerChooseComponents();
         addOnlineModeButton();
         addOnlineModeTypeComponents();
+        addOtherComponents();
         serverSelectComponents();
         setSizesMainFrame();
         addListeners();
@@ -108,6 +111,7 @@ public class MainFrame extends JFrame {
             System.out.println("click OfflineMode Btn");
             this.offlineModeBtn.setVisible(false);
             this.onlineModeBtn.setVisible(false);
+            this.resizeBtn.setVisible(false);
             this.blackLabel.setVisible(true);
             this.whiteLabel.setVisible(true);
             this.offlineChoosePlayerTypeBtn1.setVisible(true);
@@ -196,6 +200,7 @@ public class MainFrame extends JFrame {
             this.startOfflineModeBtn.setVisible(false);
             this.offlineModeBtn.setVisible(true);
             this.onlineModeBtn.setVisible(true);
+            this.resizeBtn.setVisible(true);
         });
         add(offlinePlayerChooseComponentsBackBtn);
 
@@ -336,6 +341,7 @@ public class MainFrame extends JFrame {
             System.out.println("click OnlineMode Btn");
             offlineModeBtn.setVisible(false);
             onlineModeBtn.setVisible(false);
+            resizeBtn.setVisible(false);
             newGameBtn.setVisible(true);
             addGameBtn.setVisible(true);
             onlineModeTypeBackBtn.setVisible(true);
@@ -428,10 +434,26 @@ public class MainFrame extends JFrame {
             addGameBtn.setVisible(false);
             offlineModeBtn.setVisible(true);
             onlineModeBtn.setVisible(true);
+            resizeBtn.setVisible(true);
         });
         add(onlineModeTypeBackBtn);
 
         setSizeOnlineModeTypeComponents();
+    }
+
+    public void addOtherComponents() {
+        this.resizePanel = new ResizePanel(this, (int) (contentWidth * 0.5), (int) (contentHeight * 0.5));
+        this.add(this.resizePanel);
+
+        this.resizeBtn = new JButton("Resize");
+        this.resizeBtn.setMargin(new Insets(0, 0, 0, 0));
+        this.resizeBtn.addActionListener(e -> {
+            this.offlineModeBtn.setVisible(false);
+            this.onlineModeBtn.setVisible(false);
+            this.resizeBtn.setVisible(false);
+            this.resizePanel.setVisible(true);
+        });
+        this.add(this.resizeBtn);
     }
 
     public void serverSelectComponents() {
@@ -492,8 +514,8 @@ public class MainFrame extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                Object[] options = {"狠心离开", "再玩一会"};
-                int confirm = JOptionPane.showOptionDialog(MainFrame.this, "官人，再玩一会吧^_^", "提示", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                Object[] options = {"Exit", "Cancel"};
+                int confirm = JOptionPane.showOptionDialog(MainFrame.this, "Are you sure you want to exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                 if (confirm == 0) {
                     System.exit(0);
                 }
@@ -502,23 +524,45 @@ public class MainFrame extends JFrame {
 
         this.addComponentListener(new ComponentAdapter() {//拖动窗口监听
             public void componentResized(ComponentEvent e) {
-                setSizesMainFrame();
-                setSizeOfflinePlayerChooseComponents();
-                setSizesServerSelectComponents();
-                setSizeOnlineModeTypeComponents();
+                resizeThisFrame();
             }
         });
+    }
+
+    public void resizeThisFrame() {
+        setSizesMainFrame();
+        setSizeOfflinePlayerChooseComponents();
+        setSizesServerSelectComponents();
+        setSizeOnlineModeTypeComponents();
     }
 
     public void setSizesMainFrame() {
         contentHeight = thisFrame.getHeight() - inset.top - inset.bottom;
         contentWidth = thisFrame.getWidth() - inset.left - inset.right;
         offlineModeBtn.setSize((int) (thisFrame.getWidth() * 0.5), (int) (thisFrame.getHeight() * 0.1));
-        offlineModeBtn.setLocation((int) ((contentWidth - offlineModeBtn.getWidth()) / 2), (int) ((contentHeight * 0.95 - offlineModeBtn.getHeight() * 2) / 2));
+        offlineModeBtn.setLocation((int) ((contentWidth - offlineModeBtn.getWidth()) / 2), (int) ((contentHeight * 0.9 - offlineModeBtn.getHeight() * 3) / 2));
         offlineModeBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int) (offlineModeBtn.getHeight() * 0.5), (int) (offlineModeBtn.getWidth() / 6))));
         onlineModeBtn.setSize((int) (thisFrame.getWidth() * 0.5), (int) (thisFrame.getHeight() * 0.1));
         onlineModeBtn.setLocation(offlineModeBtn.getX(), offlineModeBtn.getY() + offlineModeBtn.getHeight() + (int) (contentHeight * 0.05));
         onlineModeBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int) (onlineModeBtn.getHeight() * 0.5), (int) (onlineModeBtn.getWidth() / 6))));
+
+        this.resizePanel.resizeThisPanel((int) (contentWidth * 0.5), (int) (contentHeight * 0.5));
+        this.resizePanel.setLocation((int) ((contentWidth - this.resizePanel.getWidth()) / 2), (int) ((contentHeight - this.resizePanel.getHeight()) / 2));
+
+        resizeBtn.setSize((int) (thisFrame.getWidth() * 0.5), (int) (thisFrame.getHeight() * 0.1));
+        resizeBtn.setLocation(offlineModeBtn.getX(), onlineModeBtn.getY() + onlineModeBtn.getHeight() + (int) (contentHeight * 0.05));
+        resizeBtn.setFont(new Font("Calibri", Font.BOLD, Math.min((int) (resizeBtn.getHeight() * 0.5), (int) (resizeBtn.getWidth() / 6))));
+
+        if (this.offlineModeFrame != null) {
+            this.offlineModeFrame.setSize(this.getSize());
+            this.offlineModeFrame.setLocation(this.getLocation());
+        }
+        if (this.onlineModeFrame != null) {
+            this.onlineModeFrame.setSize(this.getSize());
+            this.onlineModeFrame.setLocation(this.getLocation());
+        }
+
+        this.resizePanel.setRelativeSizeDisplayedInInputBoxes(((double) this.getWidth()) / ScreenSize.getWidth(), ((double) this.getHeight()) / ScreenSize.getHeight());
     }
 
     public void setSizeOnlineModeTypeComponents() {
@@ -644,5 +688,17 @@ public class MainFrame extends JFrame {
 
     public boolean isServerIsRunning() {
         return this.serverIsRunning;
+    }
+
+    public JButton getOfflineModeBtn() {
+        return offlineModeBtn;
+    }
+
+    public JButton getOnlineModeBtn() {
+        return onlineModeBtn;
+    }
+
+    public JButton getResizeBtn() {
+        return resizeBtn;
     }
 }
